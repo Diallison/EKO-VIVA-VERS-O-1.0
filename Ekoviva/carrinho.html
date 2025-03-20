@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - eKoviva</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Adicione um link para seu CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: calc(33.333% - 40px);
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 100%;
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .product-item h3 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .product-item p {
+            color: #777;
+            font-size: 16px;
+        }
+
+        .product-item button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .product-item button:hover {
+            background-color: #45a049;
+        }
+
+        .cart-container {
+            margin-top: 30px;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-items table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-items table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        .cart-items th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .cart-items th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .total-price {
+            text-align: right;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .checkout-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Carrinho de Compras - eKoviva</h1>
+        <p>Veja os produtos que você selecionou!</p>
+    </header>
+
+    <div class="container">
+        <div class="product-list">
+            <!-- Produto 1 -->
+            <div class="product-item">
+                <img src="./imagem/garrafa.jpg" alt="Garrafa Sustentável">
+                <h3>Garrafa de Água Reutilizável</h3>
+                <p>Preço: R$ 45,00</p>
+                <button onclick="addToCart('Garrafa de Água Reutilizável', 45)">Adicionar ao Carrinho</button>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="product-item">
+                <img src="./imagem/Escova.png" alt="Escova de Dente Ecológica">
+                <h3>Escova de Dente de Bambu</h3>
+                <p>Preço: R$ 15,00</p>
+                <button onclick="addToCart('Escova de Dente de Bambu', 15)">Adicionar ao Carrinho</button>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="product-item">
+                <img src="./imagem/sacola.png" alt="Sacola Reutilizável">
+                <h3>Sacola Reutilizável de Algodão</h3>
+                <p>Preço: R$ 20,00</p>
+                <button onclick="addToCart('Sacola Reutilizável de Algodão', 20)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <div class="cart-container">
+            <h2>Itens no Carrinho</h2>
+            <div class="cart-items">
+                <table id="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items-body">
+                        <!-- Itens do carrinho serão exibidos aqui -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-price">
+                <p><strong>Total: R$ <span id="total-price">0,00</span></strong></p>
+            </div>
+
+            <button class="checkout-btn" onclick="checkout()">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(productName, price) {
+            // Verifica se o produto já está no carrinho
+            let productIndex = cart.findIndex(item => item.name === productName);
+
+            if (productIndex !== -1) {
+                // Se o produto já existe no carrinho, incrementa a quantidade
+                cart[productIndex].quantity++;
+            } else {
+                // Se o produto não existe, adiciona o produto com quantidade 1
+                cart.push({ name: productName, price: price, quantity: 1 });
+            }
+
+            updateCart();
+        }
+
+        function updateCart() {
+            // Atualiza a tabela do carrinho
+            let cartItemsBody = document.getElementById("cart-items-body");
+            cartItemsBody.innerHTML = ''; // Limpa a tabela
+
+            let total = 0;
+
+            cart.forEach(item => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>R$ ${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td><button onclick="removeFromCart('${item.name}')">Remover</button></td>
+                `;
+                cartItemsBody.appendChild(row);
+
+                total += item.price * item.quantity;
+            });
+
+            document.getElementById("total-price").textContent = total.toFixed(2);
+        }
+
+        function removeFromCart(productName) {
+            cart = cart.filter(item => item.name !== productName);
+            updateCart();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Seu carrinho está vazio! Adicione itens antes de finalizar a compra.");
+            } else {
+                alert("Compra finalizada com sucesso! Em breve entraremos em contato.");
+                cart = [];
+                updateCart();
+            }
+        }
+    </script>
+</body>
+</html>

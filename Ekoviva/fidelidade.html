@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa de Fidelidade - eKoverde</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Adicione um link para seu CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        section {
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .fidelidade-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .info {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .form-container input, .form-container select, .form-container button {
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .resultado {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Programa de Fidelidade eKoverde</h1>
+        <p>Troque seus pontos por criptomoedas eKoverde!</p>
+    </header>
+    
+    <section>
+        <div class="fidelidade-title">Troca de Pontos</div>
+        <p class="info">Olá, cliente! A cada **R$ 10,00** em compras, você ganha **1 criptomoeda eKoverde**. Complete o formulário abaixo para calcular quantas criptomoedas você pode ganhar com base no valor gasto.</p>
+        
+        <div class="form-container">
+            <form id="fidelidade-form">
+                <label for="valor-compra">Valor Total da Compra (em R$):</label>
+                <input type="number" id="valor-compra" name="valor-compra" min="10" required>
+                
+                <button type="button" onclick="calcularCriptomoedas()">Calcular Criptomoedas</button>
+            </form>
+        </div>
+
+        <div class="resultado" id="resultado">
+            <!-- O resultado será mostrado aqui -->
+        </div>
+    </section>
+
+    <script>
+        function calcularCriptomoedas() {
+            // Obter o valor gasto da compra
+            var valorCompra = parseFloat(document.getElementById('valor-compra').value);
+            
+            if (valorCompra >= 10) {
+                // Calcular quantas criptomoedas o cliente pode ganhar
+                var criptomoedas = Math.floor(valorCompra / 10);
+                
+                // Exibir o resultado
+                document.getElementById('resultado').innerHTML = 
+                    "Você pode ganhar " + criptomoedas + " criptomoeda(s) eKoverde!";
+            } else {
+                document.getElementById('resultado').innerHTML = 
+                    "O valor mínimo para troca é R$ 10,00. Por favor, insira um valor maior.";
+            }
+        }
+    </script>
+</body>
+</html>
